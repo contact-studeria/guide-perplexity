@@ -1,0 +1,513 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Livret de tournage — Perplexity + Comet</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0f0038; --soft:#4a4a6a; --muted:#8a8aa0;
+  --accent:#7b1ad5; --accent-soft:#f3ecfb;
+  --surface:#ffffff; --white:#ffffff; --panel:#f7f7fa;
+  --border:#e3e2e8; --border-strong:#cfcdd8;
+  --alert:#b42318;
+  --radius:10px; --rlg:14px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);background:var(--surface);line-height:1.7}
+
+.sidebar{position:fixed;top:0;left:0;width:290px;height:100vh;background:var(--ink);
+  padding:26px 14px;overflow-y:auto;z-index:100;transition:transform .3s}
+.sidebar .logo{font-size:18px;color:#fff;font-weight:700;padding:0 10px}
+.sidebar .sub{font-size:10px;color:rgba(255,255,255,.4);text-transform:uppercase;
+  letter-spacing:1.6px;margin:5px 0 22px;padding:0 10px}
+.nav-section{font-size:10px;color:rgba(255,255,255,.45);text-transform:uppercase;
+  letter-spacing:1.4px;padding:14px 10px 6px;font-weight:700}
+.sidebar a{display:flex;align-items:flex-start;gap:10px;padding:7px 10px;margin-bottom:1px;
+  color:rgba(255,255,255,.62);text-decoration:none;font-size:13px;font-weight:400;
+  border-radius:6px;line-height:1.4;transition:.15s}
+.sidebar a:hover,.sidebar a.active{background:rgba(255,255,255,.08);color:#fff}
+.sidebar .n{font-family:'JetBrains Mono',monospace;font-size:11px;
+  color:rgba(255,255,255,.35);min-width:20px;flex-shrink:0}
+.sidebar .div{height:1px;background:rgba(255,255,255,.1);margin:14px 10px}
+.toggle{display:none;position:fixed;top:12px;left:12px;z-index:200;background:var(--ink);
+  color:#fff;border:none;border-radius:8px;padding:8px 12px;font-size:18px;cursor:pointer}
+
+.main{margin-left:290px;min-height:100vh}
+.hero{background:var(--ink);padding:56px 50px 48px}
+.hero-c{max-width:760px}
+.badge{display:inline-block;color:rgba(255,255,255,.5);font-size:11px;font-weight:600;
+  letter-spacing:1.4px;text-transform:uppercase;margin-bottom:14px}
+.hero h1{font-size:clamp(28px,4vw,40px);color:#fff;font-weight:700;line-height:1.2;margin-bottom:12px}
+.hero h1 em{font-style:normal;color:#fff}
+.hero-c>p{font-size:16px;color:rgba(255,255,255,.6);max-width:600px;margin-bottom:26px}
+.hero-tags{display:flex;gap:10px;flex-wrap:wrap}
+.hero-tags span{display:flex;align-items:center;gap:7px;color:rgba(255,255,255,.75);
+  font-size:12.5px;background:rgba(255,255,255,.07);border-radius:6px;padding:6px 12px}
+.hero-tags .ic{font-size:13px;opacity:.75}
+
+.content{max-width:800px;margin:0 auto;padding:44px 32px 100px}
+.ch{margin-bottom:52px;scroll-margin-top:20px}
+.ch-head{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.ch-num{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--muted);
+  flex-shrink:0}
+.ch h2{font-size:23px;font-weight:700;line-height:1.25}
+.card{background:var(--white);border-radius:var(--rlg);padding:30px;border:1px solid var(--border)}
+.card p{margin-bottom:14px;color:var(--soft);font-size:15px}
+.card p:last-child{margin-bottom:0}
+.card strong{color:var(--ink);font-weight:600}
+.card h3{font-size:18px;font-weight:700;color:var(--ink);margin:34px 0 12px;
+  padding-top:18px;border-top:1px solid var(--border)}
+.card h3:first-child{margin-top:0;padding-top:0;border-top:none}
+.card h4{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:1.1px;
+  text-transform:uppercase;margin:20px 0 8px}
+.card ul{margin:10px 0 14px 20px;color:var(--soft);font-size:15px}
+.card li{margin-bottom:6px}
+.card a{color:var(--accent);font-weight:600}
+
+.analogy,.prereq,.warning-big{background:var(--panel);border-radius:var(--radius);
+  padding:18px 22px;margin:18px 0;border:1px solid var(--border);border-left:3px solid var(--border-strong)}
+.warning-big{border-left-color:var(--alert)}
+.analogy .al,.prereq .pl,.warning-big .wl{font-weight:700;color:var(--ink);font-size:12px;
+  letter-spacing:.6px;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:7px}
+.warning-big .wl{color:var(--alert)}
+.analogy p,.prereq p,.prereq li,.warning-big p{font-size:14.5px;color:var(--soft);margin:0}
+.prereq ul{list-style:none;padding:0;margin:6px 0 0}
+.prereq li{padding:5px 0 5px 22px;position:relative}
+.prereq li::before{content:'\2610';position:absolute;left:0;color:var(--muted)}
+
+.steps{counter-reset:s;list-style:none;padding:0;margin:16px 0}
+.steps li{counter-increment:s;position:relative;padding:12px 14px 12px 46px;margin-bottom:6px;
+  background:var(--white);border-radius:var(--radius);border:1px solid var(--border);
+  font-size:14.5px;color:var(--soft)}
+.steps li::before{content:counter(s);position:absolute;left:14px;top:14px;
+  color:var(--muted);font-size:12px;font-weight:700;font-family:'JetBrains Mono',monospace}
+.steps li strong{color:var(--ink)}
+
+.tw{overflow-x:auto;margin:16px 0;border-radius:var(--radius);border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+thead{background:var(--panel)}
+thead th{padding:11px 14px;text-align:left;color:var(--ink);font-weight:700;font-size:11px;
+  text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;border-bottom:1px solid var(--border-strong)}
+tbody td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--soft);vertical-align:top}
+tbody tr:last-child td{border-bottom:none}
+.vide{color:var(--muted);font-style:italic;font-size:12px}
+.cap{font-size:12.5px;color:var(--muted);margin:-6px 0 16px}
+
+.tip{display:flex;gap:12px;padding:16px 20px;border-radius:var(--radius);margin:16px 0;
+  background:var(--panel);border:1px solid var(--border);border-left:3px solid var(--border-strong)}
+.tip.warn,.tip.err{border-left-color:var(--alert)}
+.tip-i{font-size:16px;flex-shrink:0;margin-top:1px;opacity:.8}
+.tip-c{font-size:14px;color:var(--soft)}
+.tip-c strong{color:var(--ink)}
+.tip-c>strong:first-child{display:block;margin-bottom:3px}
+
+.vg{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:16px 0}
+.vc{background:var(--white);border-radius:var(--radius);padding:16px;border:1px solid var(--border)}
+.vc .vt{font-weight:700;color:var(--ink);font-size:14px;margin-bottom:4px}
+.vc .vd{font-size:13px;color:var(--soft)}
+.vc .ve{font-size:12px;color:var(--muted);margin-top:5px}
+
+.flow{display:flex;align-items:center;gap:0;margin:20px 0;flex-wrap:wrap;justify-content:center}
+.flow-node{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);
+  padding:12px 18px;text-align:center;min-width:120px}
+.flow-node .fl{font-size:20px;margin-bottom:4px;opacity:.8}
+.flow-node .fn2{font-weight:700;font-size:13px;color:var(--ink)}
+.flow-node .fd{font-size:11px;color:var(--muted)}
+.flow-arrow{font-size:18px;color:var(--muted);padding:0 8px;flex-shrink:0}
+
+.cbx{margin:16px 0;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;background:var(--panel)}
+.cbx-h{display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:9px 14px;border-bottom:1px solid var(--border)}
+.cbx-l{font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.7px}
+.cbx-b{background:var(--white);color:var(--ink);border:1px solid var(--border-strong);border-radius:6px;
+  padding:5px 13px;font-size:11.5px;font-weight:700;cursor:pointer;font-family:inherit;flex-shrink:0}
+.cbx-b:hover{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+.cbx-b.done{color:var(--accent);border-color:var(--accent)}
+.cbx-p{padding:14px 16px;margin:0;color:var(--ink);font-family:'JetBrains Mono',monospace;
+  font-size:12px;line-height:1.7;white-space:pre-wrap;overflow-x:auto;max-height:420px;overflow-y:auto}
+
+.dlb{display:flex;align-items:center;gap:14px;text-decoration:none;margin:14px 0;width:100%;
+  text-align:left;font-family:inherit;cursor:pointer;
+  background:var(--white);border:1px solid var(--accent);border-radius:var(--radius);
+  padding:14px 18px;transition:.15s}
+.dlb[disabled]{opacity:.5;cursor:default;border-color:var(--border)}
+.dlb:hover{background:var(--accent-soft)}
+.dlb-i{flex-shrink:0;width:34px;height:34px;border-radius:8px;background:var(--accent);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700}
+.dlb-t{display:flex;flex-direction:column;min-width:0}
+.dlb-t b{color:var(--ink);font-size:14.5px;font-weight:700}
+.dlb-t span{color:var(--muted);font-size:12.5px}
+
+.footer{text-align:center;padding:36px;color:var(--muted);font-size:12.5px;
+  border-top:1px solid var(--border);margin-top:36px}
+
+@media (max-width:800px){
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0)}
+  .toggle{display:block}
+  .main{margin-left:0}
+  .hero{padding:68px 20px 40px}
+  .content{padding:28px 16px 60px}
+  .card{padding:20px}
+  .flow{flex-direction:column}
+  .flow-arrow{transform:rotate(90deg)}
+}
+@media print{
+  .sidebar,.toggle,.cbx-b,.dlb{display:none !important}
+  .main{margin-left:0 !important}
+  .hero{background:#fff;color:#000;padding:0 0 24px}
+  .hero h1,.hero h1 em{color:#000}
+  .hero-c>p,.badge,.hero-tags span{color:#333}
+  .ch,.lec{break-inside:avoid}
+  .card{border:1px solid #ddd}
+}
+</style>
+
+<style>
+.lec{border:1px solid var(--border);border-radius:var(--rlg);margin:22px 0;overflow:hidden;
+  scroll-margin-top:20px}
+.lec-h{display:flex;align-items:baseline;gap:12px;padding:15px 20px;background:var(--panel);
+  border-bottom:1px solid var(--border);flex-wrap:wrap}
+.lec-n{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;
+  color:var(--muted);flex-shrink:0}
+.lec-t{font-weight:700;font-size:16.5px;color:var(--ink);flex:1 1 180px;min-width:0}
+.lec-d{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);flex-shrink:0}
+.lec-b{padding:22px 20px}
+.lec-b>p{font-size:15px}
+.say{border-left:3px solid var(--accent);padding:2px 0 2px 16px;margin:0 0 20px}
+.say .sl{font-size:10.5px;letter-spacing:1.3px;text-transform:uppercase;color:var(--muted);
+  font-weight:700;margin-bottom:5px}
+.say p{color:var(--ink);font-size:15.5px;margin:0;font-style:italic;line-height:1.6}
+.ecr{display:grid;grid-template-columns:auto 1fr;gap:9px 18px;margin:18px 0;align-items:baseline;
+  padding:16px 18px;background:var(--panel);border-radius:var(--radius)}
+.ecr dt{font-size:10.5px;letter-spacing:.9px;text-transform:uppercase;color:var(--muted);
+  font-weight:700;white-space:nowrap}
+.ecr dd{margin:0;font-size:14.5px;color:var(--soft)}
+.ecr dd b{color:var(--ink)}
+@media (max-width:560px){.ecr{grid-template-columns:1fr;gap:2px}.ecr dd{margin-bottom:10px}}
+.clics{counter-reset:k;list-style:none;padding:0;margin:10px 0 4px}
+.clics li{counter-increment:k;position:relative;padding:8px 0 8px 34px;
+  border-bottom:1px solid var(--border);font-size:14.5px;color:var(--soft);line-height:1.6}
+.clics li:last-child{border-bottom:none}
+.clics li::before{content:counter(k);position:absolute;left:0;top:8px;
+  color:var(--muted);font-size:11.5px;font-weight:700;font-family:'JetBrains Mono',monospace}
+.clics li b{color:var(--ink)}
+.hc2{font-size:13.5px;color:var(--muted);border-top:1px solid var(--border);
+  padding-top:12px;margin-top:16px}
+.hc2 b{color:var(--soft)}
+</style>
+
+<style>.ch{margin-bottom:0}#prepa{scroll-margin-top:20px}</style>
+
+<button class="toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
+
+<nav class="sidebar">
+  <div class="logo">🔎 Perplexity + Comet</div>
+  <div class="sub">Livret de tournage · Studeria</div>
+  <div class="nav-section">🎬 Avant de tourner</div>
+  <a href="#prepa"><span class="n">•</span>Le plateau et les données</a>
+  <div class="div"></div>
+  <div class="nav-section">📖 Les leçons</div>
+  <a href="#L01"><span class="n">01</span>Pourquoi pas un chatbot classique</a>
+  <a href="#L02"><span class="n">02</span>Les modes et Comet</a>
+  <a href="#L03"><span class="n">03</span>Ce que ça coûte vraiment</a>
+  <a href="#L04"><span class="n">04</span>Le point de départ</a>
+  <a href="#L05"><span class="n">05</span>Comprendre le secteur</a>
+  <a href="#L06"><span class="n">06</span>Creuser l'entreprise</a>
+  <a href="#L07"><span class="n">07</span>Faire travailler Comet sur le site du client</a>
+  <a href="#L08"><span class="n">08</span>Situer l'interlocuteur</a>
+  <a href="#L09"><span class="n">09</span>Transformer en questions</a>
+  <a href="#L10"><span class="n">10</span>Le brief d'une page</a>
+  <a href="#L11"><span class="n">11</span>Limites et checklist</a>
+</nav>
+
+<div class="main">
+<div class="hero"><div class="hero-c">
+  <span class="badge">🎬 Focus outils · Outil 6</span>
+  <h1>Tourner le chapitre <em>Perplexity + Comet</em></h1>
+  <p>11 leçons, 1 h 18. Préparer un rendez-vous de bout en bout, avec des sources qu'on peut citer.</p>
+  <div class="hero-tags"><span><span class="ic">📋</span>11 leçons · 1 h 18</span><span><span class="ic">🔑</span>Compte gratuit</span><span><span class="ic">⏱️</span>40 min de préparation</span><span><span class="ic">📊</span>1 Research par mois</span></div>
+</div></div>
+
+<div class="content">
+<div class="ch" id="prepa">
+  <div class="card">
+<p><strong>11 leçons, 1 h 18.</strong> Le cas pratique : un rendez-vous dans deux heures avec une
+entreprise qu'on ne connaît pas. On le prépare de bout en bout — le secteur, l'entreprise,
+l'interlocuteur, les questions à poser — et on tient dans le budget du compte gratuit.</p>
+
+<div class="tip info"><span class="tip-i">🎬</span><div class="tip-c"><strong>Comment se servir de ce chapitre le jour du tournage</strong>
+Une fiche par leçon. Les questions à poser sont déjà écrites, dans les fiches et dans le fichier à
+télécharger : il n'y a qu'à remplacer le nom de l'entreprise. <strong>Ne pas improviser les
+questions à l'écran</strong> — une question mal formulée consomme une recherche du budget.</div></div>
+
+<div class="warning-big"><div class="wl">🪙 Le budget de recherches est la contrainte qui tient tout le chapitre</div>
+<p>Sur le gratuit : recherches simples illimitées, <strong>3 Pro par jour</strong>,
+<strong>1 Research par mois</strong>. Celle du mois ne se recharge qu'au mois suivant. Le cas
+pratique a été construit pour tenir dedans : <strong>une seule Research, sur le secteur, en
+leçon 5</strong>. Ne pas la dépenser avant.</p>
+<p><strong>Si les leçons ne peuvent pas s'enchaîner dans la journée, tourner la leçon 5 en
+premier.</strong></p></div>
+
+<h3>Le budget, leçon par leçon</h3>
+<div class="tw"><table><thead><tr><th>Leçon</th><th>Ce qu&#x27;on dépense</th><th>Sur quoi</th></tr></thead><tbody><tr><td>2</td><td>1 Pro</td><td>La comparaison des modes, sur une question &lt;b&gt;neutre&lt;/b&gt;</td></tr><tr><td>5</td><td>&lt;b&gt;1 Research&lt;/b&gt;</td><td>Le secteur. &lt;b&gt;La seule du mois.&lt;/b&gt;</td></tr><tr><td>6</td><td>1 à 2 Pro</td><td>L&#x27;entreprise</td></tr><tr><td>7</td><td>0</td><td>Comet lit des pages, ça ne consomme pas de recherche</td></tr><tr><td>8</td><td>Simples</td><td>L&#x27;interlocuteur</td></tr></tbody></table></div><p class="cap">Vérifier les compteurs à l'écran le matin du tournage : ces chiffres bougent.</p>
+
+<div class="warning-big"><div class="wl">🖐️ Ce qui est préparé, et ce qui se fait devant la caméra</div>
+<p>Le <strong>choix de l'entreprise</strong>, les <strong>questions</strong>, le <strong>modèle de
+brief</strong>, les <strong>phrases à dire</strong> et la <strong>capture de l'écart
+résumé/source</strong> sont prêts. Les <strong>recherches</strong>, elles, se lancent en direct —
+et surtout, <strong>on ouvre les sources citées à l'écran</strong>. C'est ça qu'on vient voir.</p></div>
+
+<h3>À avoir sur le plateau avant de commencer</h3>
+<div class="prereq"><div class="pl">🔑 Comptes, logiciels, onglets</div>
+<ul>
+  <li>Un compte <strong>Perplexity gratuit</strong> dont la <strong>Research du mois n'a pas été
+    consommée</strong>. C'est la contrainte la plus facile à rater</li>
+  <li><strong>Comet installé</strong> sur la machine de tournage, pour la leçon 7. Le
+    téléchargement est gratuit et ouvert à tous ; certaines fonctions seulement demandent un
+    abonnement</li>
+  <li>Les <strong>paramètres du compte</strong> ouverts en onglet, pour la leçon 11 — c'est là qu'on
+    désactive la conservation des données à des fins d'amélioration des modèles,
+    <strong>activée par défaut</strong></li>
+  <li>Onglet : la page de tarifs Perplexity — pour la leçon 3</li>
+  <li>L'<strong>entreprise du cas</strong>, choisie et validée, avec ses trois onglets ouverts :
+    accueil, offres d'emploi, page tarifaire</li>
+  <li>La <strong>capture de l'écart résumé/source</strong> de la leçon 11, prise pendant la
+    préparation, avec sa date</li>
+  <li>L'<strong>espace Notion</strong> du chapitre précédent, pour y ranger le brief en leçon 10</li>
+</ul></div>
+
+<h3>Les fichiers à télécharger</h3>
+<button class="dlb" id="f72" data-nom="PERPLEXITY-candidate-prevalidee.md" onclick="tele(this)"><span class="dlb-i">⬇</span><span class="dlb-t"><b>Une candidate déjà vérifiée</b><span>Critères cochés, URL des trois pages, questions déjà remplies — reste à confirmer que ce n&#x27;est ni un client ni un prospect · PERPLEXITY-candidate-prevalidee.md · 3 Ko</span></span><script type="application/octet-stream" id="b72">IyBVbmUgY2FuZGlkYXRlIHByw6ktdmFsaWTDqWUgOiBMdWNjYQoKVsOpcmlmacOpZSBsZSAxNiBvY3RvYnJlIDIwMjYuICoqUmVzdGUgdW5lIHNldWxlIGNob3NlIMOgIGNvbmZpcm1lciBjw7R0w6kgU3R1ZGVyaWEqKiA6IHF1ZSBjZQpuJ2VzdCBuaSB1biBjbGllbnQsIG5pIHVuIHByb3NwZWN0IGVuIGNvdXJzLiBMZSByZXN0ZSBkZXMgY3JpdMOocmVzIGVzdCBjb2Now6kuCgpFbnRyZXByaXNlIDogKipMdWNjYSoqICjDqWRpdGV1ciBkZSBsb2dpY2llbHMgUkggLyBTSVJILCBGcmFuY2UpClNlY3RldXIgYSB1dGlsaXNlciBkYW5zIGxlcyBxdWVzdGlvbnMgOiAqKmxlcyBsb2dpY2llbHMgZGUgZ2VzdGlvbiBSSCAoU0lSSCkgZW4gRnJhbmNlKioKCi0tLQoKIyMgTGVzIHRyb2lzIGNyaXTDqHJlcwoKfCBDcml0w6hyZSB8IMOJdGF0IHwgT8O5IHwKfCA6LS0gfCA6LS0gfCA6LS0gfAp8IFBhZ2UgdGFyaWZhaXJlICoqYXZlYyBkZXMgcHJpeCBjaGlmZnLDqXMqKiB8IE9LIHwgbHVjY2EuZnIvdGFyaWZzIOKAlCBleC4gMyw5NyDigqwgSFQgLyBjb2xsYWJvcmF0ZXVyIC8gbW9pcyBzdXIgdW4gbW9kdWxlLCBwcsOpc2VudMOpIGNvbW1lIHVuZSBlc3RpbWF0aW9uIHBvdXIgbGVzIGVudHJlcHJpc2VzIGRlIHBsdXMgZGUgMTAwIGNvbGxhYm9yYXRldXJzIHwKfCBQYWdlICoqb2ZmcmVzIGQnZW1wbG9pKiogfCBPSyB8IGpvYnMubHVjY2Fzb2Z0d2FyZS5jb20g4oCUIHNpdGUgZGUgcmVjcnV0ZW1lbnQgZMOpZGnDqSwgZG9uYyBkZSBsYSBtYXRpw6hyZSBwb3VyIGxhIGxlw6dvbiA3IHwKfCAqKlByZXNzZSBldCBhY3R1YWxpdMOpcyoqIHwgT0sgfCBsdWNjYS5mci9wcmVzc2UgZXQgbHVjY2EuZnIvYWN0dWFsaXRlcy4gUHJlc3NlIHByb2Zlc3Npb25uZWxsZSDDqWdhbGVtZW50IDogRnJlbmNoV2ViIGEgcHVibGnDqSB1biBhcnRpY2xlIHN1ciBzb24gcG9zaXRpb25uZW1lbnQgZmFjZSBhIFBlcnNvbmlvIGV0IEZhY3RvcmlhbCB8CnwgKipEaXJpZ2VhbnQgYXUgcHJvZmlsIHB1YmxpYyoqIHwgQSBjb25maXJtZXIgZW4gcGFzc2UgYSBibGFuYyB8IEdpbGxlcyBTYXRnZSBhcHBhcmHDrnQgY29tbWUgZGlyaWdlYW50IGRhbnMgZGVzIHByaXNlcyBkZSBwYXJvbGUgcHVibGlxdWVzIChwb2RjYXN0LCBwcmVzc2UgcHJvZmVzc2lvbm5lbGxlKS4gVsOpcmlmaWVyIHNvbiB0aXRyZSBleGFjdCBhIGwnw6ljcmFuIHBsdXTDtHQgcXVlIGRlIGwnYW5ub25jZXIgZGUgbcOpbW9pcmUgfAoKIyMgUG91cnF1b2kgZWxsZSBjb252aWVudCBhdSBjYXMgcHJhdGlxdWUKCi0gKipCb25uZSB0YWlsbGUuKiogTmkgQ0FDIDQwIOKAlCBsYSByZWNoZXJjaGUgbmUgcmV0b3VybmVyYSBwYXMgZHUgYnJ1aXQg4oCUIG5pIHRyb3AgcGV0aXRlLgotICoqVHJvaXMgcGFnZXMgYSBsaXJlIHBvdXIgQ29tZXQqKiA6IGFjY3VlaWwsIHJlY3J1dGVtZW50LCB0YXJpZnMuIEMnZXN0IGV4YWN0ZW1lbnQgY2UgcXVlCiAgZGVtYW5kZSBsYSBsZcOnb24gNy4KLSAqKlVuIHNlY3RldXIgcXVpIGEgZGUgbGEgbWF0acOocmUgcsOpZ2xlbWVudGFpcmUqKiA6IHBhaWUsIHRlbXBzIGRlIHRyYXZhaWwsIGRvbm7DqWVzIGRlCiAgc2FsYXJpw6lzLiBMYSBSZXNlYXJjaCBkZSBsYSBsZcOnb24gNSBhdXJhIGRlIHF1b2kgZmFpcmUuCi0gKipQYXMgdW4gY29uY3VycmVudCBkZSBTdHVkZXJpYSoqIDogYydlc3QgdW4gw6lkaXRldXIgZGUgbG9naWNpZWwsIHBhcyB1biBvcmdhbmlzbWUgZGUKICBmb3JtYXRpb24gbmkgdW4gY2FiaW5ldCBkZSBjb25zZWlsIGVuIElBLgoKIyMgQ2UgcXVpIHJlc3RlIGEgdsOpcmlmaWVyIGF2YW50IGRlIHJldGVuaXIKClsgXSBDZSBuJ2VzdCAqKnBhcyB1biBjbGllbnQqKiBkZSBTdHVkZXJpYQpbIF0gQ2Ugbidlc3QgKipwYXMgdW4gcHJvc3BlY3QgZW4gY291cnMqKgpbIF0gUmllbiBkZSBqdWRpY2lhaXJlIG91IGRlIGRpZmZpY2lsZSBkYW5zIHNvbiBhY3R1YWxpdMOpIGR1IG1vbWVudApbIF0gUGFzc2UgYSBibGFuYyBkZXMgbGXDp29ucyA2LCA3IGV0IDgg4oCUIDIwIG1pbnV0ZXMsIHNhbnMgZmlsbWVyCgotLS0KCiMgTGVzIHF1ZXN0aW9ucywgZMOpamEgcmVtcGxpZXMKCiMjIExlw6dvbiA1IOKAlCBsZSBzZWN0ZXVyIChsYSBSZXNlYXJjaCBkdSBtb2lzKQoKKipMYSBxdWVzdGlvbiBmYWlibGUgOioqCgpQYXJsZS1tb2kgZHUgc2VjdGV1ciBkZXMgbG9naWNpZWxzIFJIIGVuIEZyYW5jZS4KCioqTGEgcmVmb3JtdWxhdGlvbiA6KioKClF1ZWxsZXMgY29udHJhaW50ZXMgcsOpZ2xlbWVudGFpcmVzLCDDqWNvbm9taXF1ZXMgZXQgdGVjaG5vbG9naXF1ZXMgcMOoc2VudCBhdWpvdXJkJ2h1aSBzdXIKbGVzIMOpZGl0ZXVycyBkZSBsb2dpY2llbHMgZGUgZ2VzdGlvbiBSSCAoU0lSSCkgZW4gRnJhbmNlID8gUXUnZXN0LWNlIHF1aSBhIGNoYW5nw6kgZGVwdWlzCmRldXggYW5zLCBldCBxdWVscyBzdWpldHMgcmV2aWVubmVudCBsZSBwbHVzIGRhbnMgbGEgcHJlc3NlIHByb2Zlc3Npb25uZWxsZSBkdSBzZWN0ZXVyID8KCiMjIExlw6dvbiA2IOKAlCBsJ2VudHJlcHJpc2UgKDEgYSAyIFBybykKClF1ZSBzYWl0LW9uIHB1YmxpcXVlbWVudCBkZSBMdWNjYSwgw6lkaXRldXIgZnJhbsOnYWlzIGRlIGxvZ2ljaWVscyBSSCA6IHNvbiBhY3Rpdml0w6ksIHNhCnRhaWxsZSwgc29uIGFjdHVhbGl0w6kgZGVzIGRvdXplIGRlcm5pZXJzIG1vaXMsIGV0IHNlcyBkaXJpZ2VhbnRzID8gQ2l0ZSB0ZXMgc291cmNlcy4KCiMjIExlw6dvbiA3IOKAlCBDb21ldCBzdXIgbGUgc2l0ZSAoMCByZWNoZXJjaGUpCgpUcm9pcyBvbmdsZXRzIGEgb3V2cmlyIDoKLSBsdWNjYS5mcgotIGpvYnMubHVjY2Fzb2Z0d2FyZS5jb20KLSBsdWNjYS5mci90YXJpZnMKCkEgcGFydGlyIGRlIGNlcyB0cm9pcyBwYWdlcywgcXVlbHMgc2lnbmF1eCBkZSByZWNydXRlbWVudCBldCBkZSBwb3NpdGlvbm5lbWVudCBwZXV4LXR1CnJlbGV2ZXIgPyBQb3VyIGNoYXF1ZSBhZmZpcm1hdGlvbiwgaW5kaXF1ZSBkZSBxdWVsbGUgcGFnZSBlbGxlIHZpZW50LgoKIyMgTGXDp29uIDgg4oCUIGwnaW50ZXJsb2N1dGV1ciAocmVjaGVyY2hlcyBzaW1wbGVzKQoKUXVlbCBlc3QgbGUgcGFyY291cnMgcHJvZmVzc2lvbm5lbCBwdWJsaWMgZGUgW05PTV0sIFtGT05DVElPTl0gY2hleiBMdWNjYSA/IFF1ZWxsZXMgcHJpc2VzCmRlIHBhcm9sZSBwcm9mZXNzaW9ubmVsbGVzIGEtdC1pbCBvdSBlbGxlIGV1ZXMgPwoKUmVtcGxpciBbTk9NXSBldCBbRk9OQ1RJT05dIHVuZSBmb2lzIGxlIGRpcmlnZWFudCBjb25maXJtw6kgZW4gcGFzc2UgYSBibGFuYy4K</script></button><button class="dlb" id="f73" data-nom="PERPLEXITY-fiche-choix-entreprise.md" onclick="tele(this)"><span class="dlb-i">⬇</span><span class="dlb-t"><b>La fiche de validation de l&#x27;entreprise</b><span>Les 3 critères, ce qui disqualifie, et la passe à blanc — à remplir avant de retenir · PERPLEXITY-fiche-choix-entreprise.md · 1 Ko</span></span><script type="application/octet-stream" id="b73">IyBWYWxpZGVyIGxlIGNob2l4IGRlIGwnZW50cmVwcmlzZSBkdSBjYXMgcHJhdGlxdWUKCkVudHJlcHJpc2UgZW52aXNhZ8OpZSA6IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpTZWN0ZXVyIDogX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCkludGVybG9jdXRldXIgOiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX18gIEZvbmN0aW9uIDogX19fX19fX19fX19fX18KCiMjIExlcyB0cm9pcyBjcml0w6hyZXMg4oCUIGEgY29jaGVyIGF2YW50IGRlIHJldGVuaXIKClsgXSBVbmUgcGFnZSBPRkZSRVMgRCdFTVBMT0kgc3VyIGxlIHNpdGUgICAgICAgICAgIFVSTCA6IF9fX19fX19fX19fX19fX19fX19fClsgXSBVbmUgcGFnZSBUQVJJRkFJUkUgc3VyIGxlIHNpdGUgICAgICAgICAgICAgICAgIFVSTCA6IF9fX19fX19fX19fX19fX19fX19fCiAgICBTYW5zIGNlcyBkZXV4IHBhZ2VzLCBsYSBsZcOnb24gNyBuJ2EgcmllbiBhIGxpcmUuCgpbIF0gQXUgbW9pbnMgREVVWCBjb21tdW5pcXXDqXMgb3UgYXJ0aWNsZXMgZGUgcHJlc3NlIGRlcyBkb3V6ZSBkZXJuaWVycyBtb2lzCiAgICAxLiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18gIGRhdGUgOiBfX19fX19fX19fCiAgICAyLiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18gIGRhdGUgOiBfX19fX19fX19fCiAgICBTYW5zIGV1eCwgbGEgcmVjaGVyY2hlIGRlIGxhIGxlw6dvbiA2IHJldG91cm5lIGR1IHZpZGUuCgpbIF0gVW4gZGlyaWdlYW50IG91IHJlc3BvbnNhYmxlIGF2ZWMgdW4gUFJPRklMIFBST0ZFU1NJT05ORUwgUFVCTElDCiAgICBVUkwgOiBfX19fX19fX19fX19fX19fX19fXwogICAgU2FucyBwcm9maWwsIHJpZW4gYSBzaXR1ZXIgZW4gbGXDp29uIDguCgojIyBDZSBxdWkgZGlzcXVhbGlmaWUgdW5lIGNhbmRpZGF0ZQoKWyBdIENlIG4nZXN0IHBhcyB1bmUgZW50cmVwcmlzZSBkdSBDQUMgNDAgKHRyb3AgZGUgbWF0acOocmUsIGxhIHJlY2hlcmNoZSByZXRvdXJuZSBkdSBicnVpdCkKWyBdIENlIG4nZXN0IHBhcyB1bmUgdHJvcCBwZXRpdGUgc3RydWN0dXJlIChwYXMgZGUgcHJlc3NlLCBwYXMgZCdvZmZyZXMgZCdlbXBsb2kpClsgXSBDZSBuJ2VzdCBQQVMgdW4gY2xpZW50IHLDqWVsIG5pIHVuIHByb3NwZWN0IGVuIGNvdXJzIOKAlCBsYSB2aWTDqW8gZXN0IHB1Ymxpw6llClsgXSBDZSBuJ2VzdCBQQVMgdW4gY29uY3VycmVudCBkZSBTdHVkZXJpYQpbIF0gRWxsZSBuJ2VzdCBwYXMgZW4gZGlmZmljdWx0w6kgbmkgZGFucyBsJ2FjdHVhbGl0w6kganVkaWNpYWlyZQoKIyMgTGEgcGFzc2UgYSBibGFuYyDigJQgMjAgbWludXRlcywgc2FucyBmaWxtZXIKClsgXSBMZcOnb24gNiA6IGxhIHJlY2hlcmNoZSBzdXIgbCdlbnRyZXByaXNlIHJldG91cm5lIGRlIGxhIG1hdGnDqHJlLCBhdmVjIGRlcyBzb3VyY2VzCiAgICBvdXZyYWJsZXMKWyBdIExlw6dvbiA3IDogQ29tZXQgbGl0IGJpZW4gbGVzIHRyb2lzIHBhZ2VzIGV0IGVuIHRpcmUgZGVzIHNpZ25hdXgKWyBdIExlw6dvbiA4IDogbGEgcmVjaGVyY2hlIHN1ciBsJ2ludGVybG9jdXRldXIgcmV0b3VybmUgZHUgcHJvZmVzc2lvbm5lbCwgZXQgcmllbiBkZQogICAgcGVyc29ubmVsIG5lIHJlbW9udGUgc3BvbnRhbsOpbWVudAoKQ2VzIHZpbmd0IG1pbnV0ZXMgw6l2aXRlbnQgZGUgcGVyZHJlIHVuZSBqb3VybsOpZSBkZSBwbGF0ZWF1LgoKIyMgQ2UgcXUnb24gZGl0IGEgbCfDqWNyYW4sIGxlw6dvbiA0CgpKJ2FpIGNob2lzaSBjZXR0ZSBlbnRyZXByaXNlIHBhcmNlIHF1J2VsbGUgZXN0IHB1YmxpcXVlIGV0IHF1ZSBqZSBuJ2FpIGF1Y3VuIGxpZW4gYXZlYwplbGxlLiBWb3VzIGZlcmV6IHBhcmVpbCBhdmVjIHVuIHZyYWkgcHJvc3BlY3QgOiBsYSBtw6l0aG9kZSBlc3QgbGEgbcOqbWUsIGxlcyBpbmZvcm1hdGlvbnMKc29udCBsZXMgbcOqbWVzLCBlbGxlcyBzb250IHRvdXRlcyBwdWJsaXF1ZXMuCg==</script></button><button class="dlb" id="f74" data-nom="PERPLEXITY-questions-a-poser.md" onclick="tele(this)"><span class="dlb-i">⬇</span><span class="dlb-t"><b>Les questions, leçon par leçon</b><span>Déjà rédigées — remplacer [ENTREPRISE], [SECTEUR], [NOM] et [FONCTION] · PERPLEXITY-questions-a-poser.md · 2 Ko</span></span><script type="application/octet-stream" id="b74">IyBQZXJwbGV4aXR5IOKAlCBsZXMgcXVlc3Rpb25zIMOgIHBvc2VyLCBsZcOnb24gcGFyIGxlw6dvbgoKUmVtcGxhY2VyIGBbRU5UUkVQUklTRV1gLCBgW1NFQ1RFVVJdYCwgYFtOT01dYCBldCBgW0ZPTkNUSU9OXWAgdW5lIGZvaXMgbGUgY2hvaXggZmFpdC4Kw4AgZmFpcmUgQVZBTlQgbGUgdG91cm5hZ2UsIHBvdXIgbmUgcGFzIGNoZXJjaGVyIHNlcyBtb3RzIMOgIGwnw6ljcmFuLgoKLS0tCgojIyBMZcOnb24gNSDigJQgbGUgc2VjdGV1ciAobGEgUmVzZWFyY2ggZHUgbW9pcywgbGEgc2V1bGUpCgoqKkxhIHF1ZXN0aW9uIGZhaWJsZSwgY2VsbGUgcXUnb24gcG9zZSBwYXIgcsOpZmxleGUgOioqCgpQYXJsZS1tb2kgZHUgc2VjdGV1ciBbU0VDVEVVUl0uCgoqKkxhIHJlZm9ybXVsYXRpb24gOioqCgpRdWVsbGVzIGNvbnRyYWludGVzIHLDqWdsZW1lbnRhaXJlcywgw6ljb25vbWlxdWVzIGV0IHRlY2hub2xvZ2lxdWVzIHDDqHNlbnQgYXVqb3VyZCdodWkKc3VyIGxlcyBlbnRyZXByaXNlcyBkZSBbU0VDVEVVUl0gZW4gRnJhbmNlID8gUXUnZXN0LWNlIHF1aSBhIGNoYW5nw6kgZGVwdWlzIGRldXggYW5zLCBldApxdWVscyBzdWpldHMgcmV2aWVubmVudCBsZSBwbHVzIGRhbnMgbGEgcHJlc3NlIHByb2Zlc3Npb25uZWxsZSBkdSBzZWN0ZXVyID8KCkMnZXN0IGxhIENPTVBBUkFJU09OIHF1aSBmYWl0IGxhIGxlw6dvbiwgcGFzIGxhIHNlY29uZGUgcXVlc3Rpb24uIE1vbnRyZXIgbGVzIGRldXguCgotLS0KCiMjIExlw6dvbiA2IOKAlCBsJ2VudHJlcHJpc2UgKDEgw6AgMiBQcm8pCgpRdWUgc2FpdC1vbiBwdWJsaXF1ZW1lbnQgZGUgW0VOVFJFUFJJU0VdIDogc29uIGFjdGl2aXTDqSwgc2EgdGFpbGxlLCBzb24gYWN0dWFsaXTDqSBkZXMKZG91emUgZGVybmllcnMgbW9pcywgZXQgc2VzIGRpcmlnZWFudHMgPyBDaXRlIHRlcyBzb3VyY2VzLgoKUHVpcyBvdXZyaXIgREVVWCBzb3VyY2VzIGNpdMOpZXMgZXQgdsOpcmlmaWVyIHF1J2VsbGVzIGRpc2VudCBiaWVuIGNlIHF1aSBlc3QgYW5ub25jw6kuCgotLS0KCiMjIExlw6dvbiA3IOKAlCBDb21ldCBzdXIgbGUgc2l0ZSAoMCByZWNoZXJjaGUgY29uc29tbcOpZSkKClRyb2lzIG9uZ2xldHMgb3V2ZXJ0cyA6IGxhIHBhZ2UgZCdhY2N1ZWlsLCBsYSBwYWdlIG9mZnJlcyBkJ2VtcGxvaSwgbGEgcGFnZSB0YXJpZmFpcmUuCgpBIHBhcnRpciBkZSBjZXMgdHJvaXMgcGFnZXMsIHF1ZWxzIHNpZ25hdXggZGUgcmVjcnV0ZW1lbnQgZXQgZGUgcG9zaXRpb25uZW1lbnQgcGV1eC10dQpyZWxldmVyID8gUG91ciBjaGFxdWUgYWZmaXJtYXRpb24sIGluZGlxdWUgZGUgcXVlbGxlIHBhZ2UgZWxsZSB2aWVudC4KClB1aXMgcmVtb250ZXIgw6AgbGEgcGFnZSBwb3VyIHbDqXJpZmllciB1bmUgYWZmaXJtYXRpb24uClB1aXMgbW9udHJlciBsZSByw6lnbGFnZSBxdWkgY29udHLDtGxlIGNlIHF1ZSBDb21ldCBhIGxlIGRyb2l0IGRlIGZhaXJlLgoKLS0tCgojIyBMZcOnb24gOCDigJQgbCdpbnRlcmxvY3V0ZXVyIChyZWNoZXJjaGVzIHNpbXBsZXMpCgpRdWVsIGVzdCBsZSBwYXJjb3VycyBwcm9mZXNzaW9ubmVsIHB1YmxpYyBkZSBbTk9NXSwgW0ZPTkNUSU9OXSBjaGV6IFtFTlRSRVBSSVNFXSA/ClF1ZWxsZXMgcHJpc2VzIGRlIHBhcm9sZSBwcm9mZXNzaW9ubmVsbGVzIGEtdC1pbCBvdSBlbGxlIGV1ZXMgPwoKRGlyZSBhIHZvaXggaGF1dGUgY2UgcXUnb24gbmUgY2hlcmNoZSBwYXMsIGV0IHBvdXJxdW9pLgoKKipMYSBwaHJhc2UgZCdpbmZvcm1hdGlvbiwgYSBsaXJlIGZhY2UgY2FtZXJhIDoqKgoKSidhaSBwcsOpcGFyw6kgbm90cmUgcmVuZGV6LXZvdXMsIGonYWkgcmVnYXJkw6kgY2UgcXVlIHZvdHJlIGVudHJlcHJpc2UgcHVibGllIGV0IHZvdHJlCnBhcmNvdXJzIHByb2Zlc3Npb25uZWwuIFJpZW4gZCdhdXRyZSA6IGNlIHF1aSBlc3QgcHVibGljIGV0IHByb2Zlc3Npb25uZWwsIGMnZXN0IHRvdXQuCgotLS0KCiMjIExlw6dvbiA5IOKAlCBsZXMgY2lucSBxdWVzdGlvbnMgZHUgcmVuZGV6LXZvdXMKClVuZSBwYXIgc291cmNlLiBDb25zdHJ1aXRlcyBhIGwnw6ljcmFuLCBlbiBtb250cmFudCBkJ291IHZpZW50IGNoYWN1bmUuCgoxLiBVbmUgcXVlc3Rpb24gdmVudWUgZHUgU0VDVEVVUiAobGXDp29uIDUpIOKAlCB1bmUgY29udHJhaW50ZSByw6lnbGVtZW50YWlyZQoyLiBVbmUgcXVlc3Rpb24gdmVudWUgZGUgbCdBQ1RVQUxJVEUgZGUgbCdlbnRyZXByaXNlIChsZcOnb24gNikg4oCUIHVuIGNvbW11bmlxdcOpIHLDqWNlbnQKMy4gVW5lIHF1ZXN0aW9uIHZlbnVlIGRlcyBPRkZSRVMgRCdFTVBMT0kgKGxlw6dvbiA3KSDigJQgY2UgcXUnaWxzIGNoZXJjaGVudCBhIHJlY3J1dGVyCjQuIFVuZSBxdWVzdGlvbiB2ZW51ZSBkZSBsYSBQQUdFIFRBUklGQUlSRSAobGXDp29uIDcpIOKAlCBsZXVyIHBvc2l0aW9ubmVtZW50CjUuIFVuZSBxdWVzdGlvbiB2ZW51ZSBkdSBQQVJDT1VSUyBkZSBsJ2ludGVybG9jdXRldXIgKGxlw6dvbiA4KSDigJQgY2UgcXVpIGxlIGNvbmNlcm5lIGx1aQoKTGEgY2lucXVpw6htZSBzZSBmb3JtdWxlIHRvdWpvdXJzIHBhcmVpbCA6IG9uIG5lIGRlbWFuZGUgcGFzIMKrIGonYWkgdnUgcXVlIHZvdXMgYXZleiBmYWl0ClggwrssIG9uIGRlbWFuZGUgwqsgY29tbWVudCDDp2Egc2UgcGFzc2UgY2hleiB2b3VzIHN1ciBZIMK7Lgo=</script></button><button class="dlb" id="f75" data-nom="PERPLEXITY-brief-une-page.md" onclick="tele(this)"><span class="dlb-i">⬇</span><span class="dlb-t"><b>Le modèle de brief — leçon 10</b><span>La trame à remplir, à coller ensuite dans la fiche client Notion · PERPLEXITY-brief-une-page.md · 0 Ko</span></span><script type="application/octet-stream" id="b75">IyBCcmllZiDigJQgW0VOVFJFUFJJU0VdCgoqKlJlbmRlei12b3VzIGxlKiogOgoqKkF2ZWMqKiA6IFtOT01dLCBbRk9OQ1RJT05dCioqUHLDqXBhcsOpIGxlKiogOgoKIyMgRW4gdHJvaXMgbGlnbmVzCkNlIHF1J2lscyBmb250LCBsZXVyIHRhaWxsZSwgb3UgaWxzIGVuIHNvbnQuCgojIyBMZSBzZWN0ZXVyLCBjZSBxdWkgY29tcHRlIGVuIGNlIG1vbWVudApEZXV4IG91IHRyb2lzIHBvaW50cywgaXNzdXMgZGUgbGEgUmVzZWFyY2guIEF2ZWMgbGVzIHNvdXJjZXMuCgotCi0KLQoKIyMgTCdlbnRyZXByaXNlLCBsZXMgZG91emUgZGVybmllcnMgbW9pcwpDZSBxdWkgYSBib3Vnw6kgOiBjb21tdW5pcXXDqXMsIHJlY3J1dGVtZW50cywgY2hhbmdlbWVudHMgdmlzaWJsZXMuIEF2ZWMgbGVzIHNvdXJjZXMuCgotCi0KCiMjIExlcyBzaWduYXV4IGR1IHNpdGUKQ2UgcXVlIGRpc2VudCBsZXMgb2ZmcmVzIGQnZW1wbG9pIGV0IGxhIHBhZ2UgdGFyaWZhaXJlLiBQb3NpdGlvbm5lbWVudCwgZXQgY2UgcXUnaWxzCmNoZXJjaGVudCBhIHJlbmZvcmNlci4KCi0KLQoKIyMgTCdpbnRlcmxvY3V0ZXVyClBhcmNvdXJzIHByb2Zlc3Npb25uZWwsIHByaXNlcyBkZSBwYXJvbGUuIFJpZW4gZGUgcGVyc29ubmVsLgoKLQoKIyMgTWVzIGNpbnEgcXVlc3Rpb25zCjEuCjIuCjMuCjQuCjUuCgojIyBDZSBxdWUgamUgbmUgc2FpcyBwYXMKTGVzIHRyb3VzLiBDJ2VzdCBsYSBzZWN0aW9uIGxhIHBsdXMgdXRpbGUgZHUgYnJpZWYsIGV0IGNlbGxlIHF1J29uIHN1cHByaW1lIHF1YW5kIG9uIGVzdApwcmVzc8OpLgoKLQotCgotLS0KVU5FIFBBR0UuIFNpIGNhIGTDqWJvcmRlLCBjJ2VzdCBxdSdvbiBhIHJlY29wacOpIGRlIGxhIHJlY2hlcmNoZSBhdSBsaWV1IGRlIHRyaWVyLgpMZSBicmllZiBzZSBsaXQgZGFucyBsYSB2b2l0dXJlIGF2YW50IGQnZW50cmVyLCBwYXMgbGEgdmVpbGxlIGF1IHNvaXIuCg==</script></button>
+
+<div class="warning-big"><div class="wl">⚠️ La décision qui conditionne cinq leçons</div>
+<p>L'entreprise du cas est <strong>réelle</strong>, et rien de tout cela ne s'invente. Elle doit
+avoir une <strong>page d'offres d'emploi</strong> et une <strong>page tarifaire</strong> (leçon 7),
+<strong>deux communiqués ou articles</strong> des douze derniers mois (leçon 6), et un
+<strong>dirigeant au profil professionnel public</strong> (leçon 8). Et elle ne doit être ni un
+client, ni un prospect en cours, ni un concurrent de Studeria — <strong>la vidéo est
+publiée</strong>.</p>
+<p>Faire la <strong>passe à blanc des leçons 6, 7 et 8 sans filmer</strong>. Vingt minutes qui
+évitent de perdre une journée de plateau.</p>
+<p><strong>Une candidate est déjà vérifiée</strong> et fournie plus haut : les trois critères sont
+cochés, les URL sont dedans, et les questions sont déjà remplies. Il reste à confirmer qu'elle n'est
+ni cliente ni prospecte — ça, seul Studeria le sait.</p></div>
+
+<div class="part-sep"></div>
+<h3>Partie 1 — Les bases</h3>
+
+<div class="lec" id="L01">
+  <div class="lec-h"><span class="lec-n">01</span><span class="lec-t">Pourquoi pas un chatbot classique</span><span class="lec-d">6 min</span></div>
+  <div class="lec-b">
+    <div class="say"><div class="sl">La phrase d'ouverture</div><p>« La différence tient en un mot : la source. »</p></div>
+    <dl class="ecr"><dt>À l'écran</dt><dd>Deux fenêtres côte à côte : un assistant classique à gauche, Perplexity à droite.</dd><dt>Données</dt><dd>Aucune. Une seule question, posée aux deux.</dd><dt>Ce qu'on démontre</dt><dd>Perplexity <b>cherche puis répond, en citant</b>. C'est ce qui change tout quand il faut défendre une information devant un client.</dd></dl>
+    <h4>Les gestes, dans l'ordre</h4>
+    <ol class="clics"><li>Poser la même question aux deux outils, en même temps.</li><li>Lire les deux réponses. Celle de gauche est plausible et invérifiable, celle de droite porte des numéros de source.</li><li><b>Cliquer sur une source</b> à droite et ouvrir la page. C'est le geste qui fait la leçon.</li><li>Dire ce que ça change concrètement : une information qu'on peut montrer à un client, pas une information qu'on croit.</li></ol>
+    
+    <p class="hc2"><b>Hors champ :</b> Les modes et les quotas, qui sont les leçons 2 et 3. Une question posée à deux outils, et la différence se voit.</p>
+  </div>
+</div>
+<div class="lec" id="L02">
+  <div class="lec-h"><span class="lec-n">02</span><span class="lec-t">Les modes et Comet</span><span class="lec-d">7 min</span></div>
+  <div class="lec-b">
+    <div class="say"><div class="sl">La phrase d'ouverture</div><p>« Trois modes, trois coûts. Celui qu'on choisit par réflexe est rarement le bon. »</p></div>
+    <dl class="ecr"><dt>À l'écran</dt><dd>Perplexity, sur un <b>compte gratuit</b> — pour que les compteurs affichés soient ceux de l'apprenant.</dd><dt>Données</dt><dd>Une question <b>neutre</b>, sans rapport avec le cas pratique.</dd><dt>Budget</dt><dd><b>1 Pro</b> est dépensée ici. Pas la Research — surtout pas.</dd></dl>
+    <h4>Les gestes, dans l'ordre</h4>
+    <ol class="clics"><li>Nommer les trois modes et ce qu'ils coûtent : la <b>recherche simple</b>, illimitée, qui répond en citant — c'est 90 % des usages. La <b>recherche Pro</b>, qui creuse davantage, 3 par jour. La <b>recherche Research</b>, qui produit un dossier complet, 1 par mois.</li><li>Lancer la question neutre en <b>recherche simple</b>, puis la même en <b>Pro</b>.</li><li>Comparer la profondeur et le temps de réponse, à l'écran.</li><li><b>Montrer le compteur qui descend</b> juste après.</li><li>Poser la vraie leçon, qui n'est pas « comment on clique » mais <b>comment on arbitre</b> : à quelle question on dépense sa Research du mois, et pourquoi.</li><li>Annoncer la décision du cas pratique : elle sera dépensée <b>sur le secteur</b>, pas sur l'entreprise. Dire pourquoi — le secteur resservira pour tous les prospects du même marché.</li></ol>
+    
+    <p class="hc2"><b>Hors champ :</b> La recherche sur le cas pratique, qui commence en leçon 4. On compare les modes sur une question neutre pour ne pas entamer le budget du cas.</p>
+  </div>
+</div>
+<div class="lec" id="L03">
+  <div class="lec-h"><span class="lec-n">03</span><span class="lec-t">Ce que ça coûte vraiment</span><span class="lec-d">6 min</span></div>
+  <div class="lec-b">
+    <div class="say"><div class="sl">La phrase d'ouverture</div><p>« Le gratuit tient pour un usage occasionnel. Voilà où il s'arrête. »</p></div>
+    <dl class="ecr"><dt>À l'écran</dt><dd>La page de tarifs, puis le compte gratuit avec ses compteurs visibles.</dd><dt>Données</dt><dd>Aucune. <b>Lire les chiffres à l'écran</b>, dire la date du jour.</dd><dt>Le point à ne pas rater</dt><dd><b>Comet est téléchargeable gratuitement par tout le monde</b> depuis octobre 2025, sans abonnement. Certaines fonctions seulement, comme l'assistant de messagerie, restent réservées aux abonnés.</dd></dl>
+    <h4>Les gestes, dans l'ordre</h4>
+    <ol class="clics"><li>Ouvrir la page de tarifs, dire la date.</li><li>Lire les chiffres du gratuit : recherches simples illimitées, <b>3 Pro par jour</b>, <b>1 Research par mois</b>, téléversement de fichiers limité.</li><li><b>Montrer les deux compteurs</b> dans le compte : les Pro restantes du jour, et la Research du mois.</li><li>Dire que Comet se télécharge gratuitement, et nommer ce qui demande un abonnement.</li><li>Dire ce que l'abonnement achète <b>réellement</b> : du <b>volume</b> de recherches approfondies, pas une meilleure qualité de réponse.</li><li>Poser le calcul à l'écran : un consultant qui prépare <b>deux rendez-vous par semaine</b> tient au gratuit ; celui qui en prépare <b>dix</b> ne tient pas.</li></ol>
+    <div class="tip warn"><span class="tip-i">📅</span><div class="tip-c"><strong>Ces chiffres bougent</strong>
+Rouvrir la page de tarifs le matin du tournage et annoncer la date. Une vidéo datée reste utilisable
+même quand une grille change.</div></div>
+    <p class="hc2"><b>Hors champ :</b> Les offres entreprise et l'API. On montre les compteurs d'un compte gratuit, ceux que l'apprenant aura.</p>
+  </div>
+</div>
+<h3>Partie 2 — Le cas pratique : préparer un rendez-vous en deux heures</h3>
+<p>À partir d'ici, chaque leçon repart de ce que la précédente a collecté.</p>
+
+<div class="lec" id="L04">
+  <div class="lec-h"><span class="lec-n">04</span><span class="lec-t">Le point de départ</span><span class="lec-d">5 min</span></div>
+  <div class="lec-b">
+    <div class="say"><div class="sl">La phrase d'ouverture</div><p>« Un nom d'entreprise, un prénom, et deux heures devant toi. »</p></div>
+    <dl class="ecr"><dt>À l'écran</dt><dd><b>Rien.</b> Cette leçon se tourne face caméra.</dd><dt>Données</dt><dd>L'entreprise choisie et validée, et le nom de l'interlocuteur.</dd><dt>Ce qu'on pose</dt><dd>Les quatre choses à savoir avant d'entrer : le <b>secteur</b>, l'<b>entreprise</b>, la <b>personne</b>, et une <b>hypothèse de problème</b>.</dd></dl>
+    <h4>Les gestes, dans l'ordre</h4>
+    <ol class="clics"><li>Poser le cas : le nom de l'entreprise, le nom de l'interlocuteur, le temps disponible.</li><li>Dire la phrase sur le choix de l'entreprise : « j'ai choisi cette entreprise parce qu'elle est publique et que je n'ai aucun lien avec elle. Vous ferez pareil avec un vrai prospect : la méthode est la même, les informations sont les mêmes, elles sont toutes publiques. »</li><li>Annoncer le plan de travail des six leçons qui suivent, dans l'ordre.</li><li>Dire ce qu'on cherche vraiment : pas à tout savoir, mais à <b>pouvoir poser cinq bonnes questions</b>.</li></ol>
+    
+    <p class="hc2"><b>Hors champ :</b> L'écran. On pose le cas et le plan de travail, et on n'ouvre rien.</p>
+  </div>
+</div>
+<div class="lec" id="L05">
+  <div class="lec-h"><span class="lec-n">05</span><span class="lec-t">Comprendre le secteur</span><span class="lec-d">8 min</span></div>
+  <div class="lec-b">
+    <div class="say"><div class="sl">La phrase d'ouverture</div><p>« Vingt minutes pour parler le même langage que lui. »</p></div>
+    <dl class="ecr"><dt>À l'écran</dt><dd>Perplexity, mode <b>Research</b>.</dd><dt>Budget</dt><dd><b>La Research du mois.</b> La seule. Vérifier avant la prise qu'elle n'a pas été consommée.</dd><dt>Données</dt><dd>Les deux questions, déjà écrites dans le fichier téléchargé plus haut.</dd><dt>Ce qui fait la leçon</dt><dd><b>La comparaison entre la question faible et la reformulation</b>, pas la seconde question. Montrer les deux.</dd></dl>
+    <h4>Les gestes, dans l'ordre</h4>
+    <ol class="clics"><li>Poser d'abord la <b>question faible</b>, celle qu'on pose par réflexe : « parle-moi du secteur X ».</li><li>Lire la réponse à l'écran. Elle est plate, générique, inutilisable en rendez-vous. <b>Le dire.</b></li><li>Poser la <b>reformulation</b> — celle qui nomme les contraintes réglementaires, économiques et technologiques, ce qui a changé depuis deux ans, et les sujets qui reviennent dans la presse professionnelle.</li><li>Comparer les deux réponses côte à côte.</li><li>Dire pourquoi c'est <b>ici</b> qu'on dépense la Research du mois : le secteur est le seul sujet qui mérite un dossier complet, parce qu'il resservira pour tous les prospects du même marché. <b>C'est de l'arbitrage autant que de l'outil.</b></li></ol>
+    <div class="cbx">
+  <div class="cbx-h"><span class="cbx-l">La question faible</span>
+    <button class="cbx-b" onclick="cp(this,'d76')">Copier</button></div>
+  <pre id="d76" class="cbx-p">Parle-moi du secteur [SECTEUR].</pre>
+</div><div class="cbx">
+  <div class="cbx-h"><span class="cbx-l">La reformulation</span>
+    <button class="cbx-b" onclick="cp(this,'d77')">Copier</button></div>
+  <pre id="d77" class="cbx-p">Quelles contraintes réglementaires, économiques et technologiques pèsent aujourd&#x27;hui sur les entreprises de [SECTEUR] en France ? Qu&#x27;est-ce qui a changé depuis deux ans, et quels sujets reviennent le plus dans la presse professionnelle du secteur ?</pre>
+</div>
+    <p class="hc2"><b>Hors champ :</b> Plusieurs recherches Research. Une seule est dépensée, sur le secteur, et on dit pourquoi.</p>
+  </div>
+</div>
+<div class="lec" id="L06">
+  <div class="lec-h"><span class="lec-n">06</span><span class="lec-t">Creuser l'entreprise</span><span class="lec-d">8 min</span></div>
+  <div class="lec-b">
+    <div class="say"><div class="sl">La phrase d'ouverture</div><p>« Ce qu'elle dit d'elle, et ce que les autres en disent. »</p></div>
+    <dl class="ecr"><dt>À l'écran</dt><dd>Perplexity, mode <b>Pro</b>, puis les sources ouvertes dans des onglets.</dd><dt>Budget</dt><dd><b>1 à 2 Pro.</b> Il en reste pour la journée.</dd><dt>Données</dt><dd>L'entreprise choisie, et ses deux communiqués ou articles repérés à la préparation.</dd><dt>Ce qu'on distingue</dt><dd>La <b>communication officielle</b> et l'<b>information vérifiable</b>. Ce n'est pas la même chose, et c'est le tri qu'on vient montrer.</dd></dl>
+    <h4>Les gestes, dans l'ordre</h4>
+    <ol class="clics"><li>Poser la question de la leçon : l'activité, la taille, l'actualité des douze derniers mois, les dirigeants — <b>avec les sources</b>.</li><li>Lire la réponse et repérer les signaux : recrutements, communiqués, changements récents.</li><li><b>Ouvrir deux sources citées</b> et vérifier qu'elles disent bien ce qui est annoncé. C'est le geste de la leçon.</li><li>Séparer à voix haute ce qui vient de l'entreprise elle-même et ce qui vient d'un tiers.</li></ol>
+    <div class="cbx">
+  <div class="cbx-h"><span class="cbx-l">La question de la leçon 6</span>
+    <button class="cbx-b" onclick="cp(this,'d78')">Copier</button></div>
+  <pre id="d78" class="cbx-p">Que sait-on publiquement de [ENTREPRISE] : son activité, sa taille, son actualité des douze derniers mois, et ses dirigeants ? Cite tes sources.</pre>
+</div><div class="tip err"><span class="tip-i">🔍</span><div class="tip-c"><strong>Toujours ouvrir au moins une source citée à l'écran</strong>
+C'est ce geste-là qu'on veut transmettre, plus que la recherche elle-même. Une leçon où personne
+n'ouvre une source apprend à faire confiance.</div></div>
+    <p class="hc2"><b>Hors champ :</b> Les recherches sur des personnes, qui attendent la leçon 8 et son cadre. Ici on reste sur l'entreprise.</p>
+  </div>
+</div>
+<div class="lec" id="L07">
+  <div class="lec-h"><span class="lec-n">07</span><span class="lec-t">Faire travailler Comet sur le site du client</span><span class="lec-d">8 min</span></div>
+  <div class="lec-b">
+    <div class="say"><div class="sl">La phrase d'ouverture</div><p>« Perplexity cherche sur le web. Comet lit la page que tu as sous les yeux. »</p></div>
+    <dl class="ecr"><dt>À l'écran</dt><dd>Comet, avec <b>trois onglets du site</b> ouverts : accueil, offres d'emploi, page tarifaire.</dd><dt>Budget</dt><dd><b>Zéro.</b> Comet lit des pages, ça ne consomme pas de recherche.</dd><dt>Pourquoi ça sert</dt><dd>Une partie de ces pages n'est <b>pas indexée ou pas à jour</b> dans les index de recherche. C'est exactement ce que la recherche web fait mal.</dd></dl>
+    <h4>Les gestes, dans l'ordre</h4>
+    <ol class="clics"><li>Ouvrir les trois onglets du site.</li><li>Demander à l'assistant du navigateur une synthèse des <b>signaux de recrutement et de positionnement</b>, en exigeant que chaque affirmation indique de quelle page elle vient.</li><li><b>Remonter à la page</b> pour vérifier une affirmation.</li><li>Poser la limite, dans la même leçon : <b>un assistant qui lit une page exécute aussi ce que la page contient</b>. Une consigne cachée dans un site peut le détourner.</li><li>En tirer la règle : on ne laisse <b>jamais</b> un navigateur assisté agir seul sur une page de connexion, une messagerie ou un espace client. Et on relit ce qu'il rapporte avant de s'en servir.</li><li><b>Montrer le réglage</b> où l'on contrôle ce que Comet a le droit de faire.</li></ol>
+    <div class="cbx">
+  <div class="cbx-h"><span class="cbx-l">La demande à faire à Comet</span>
+    <button class="cbx-b" onclick="cp(this,'d79')">Copier</button></div>
+  <pre id="d79" class="cbx-p">À partir de ces trois pages, quels signaux de recrutement et de positionnement peux-tu relever ? Pour chaque affirmation, indique de quelle page elle vient.</pre>
+</div><div class="tip err"><span class="tip-i">🛑</span><div class="tip-c"><strong>Comet est un outil de lecture, pas un outil d'action</strong>
+Il est présenté partout comme un gadget impressionnant. Si la démonstration le montre en train de
+cliquer et de remplir des formulaires, <strong>la leçon de prudence qui suit ne passera plus</strong>.</div></div>
+    <p class="hc2"><b>Hors champ :</b> Comet en train de cliquer, de remplir un formulaire ou de se connecter à un compte. On lit des pages, on n'agit pas.</p>
+  </div>
+</div>
+<div class="lec" id="L08">
+  <div class="lec-h"><span class="lec-n">08</span><span class="lec-t">Situer l'interlocuteur</span><span class="lec-d">7 min</span></div>
+  <div class="lec-b">
+    <div class="say"><div class="sl">La phrase d'ouverture</div><p>« Son parcours, son périmètre, et ce qu'il a probablement en tête. »</p></div>
+    <dl class="ecr"><dt>À l'écran</dt><dd>Perplexity, <b>recherches simples</b>. Puis face caméra pour la phrase d'information.</dd><dt>Budget</dt><dd>Simples. Illimitées.</dd><dt>Données</dt><dd>Un profil public réel, et la <b>phrase d'information écrite à l'avance</b> — elle est plus bas.</dd><dt>Ce qui est en jeu</dt><dd>Ce n'est pas une question de politesse, c'est une question de <b>droit</b>.</dd></dl>
+    <h4>Les gestes, dans l'ordre</h4>
+    <ol class="clics"><li>Chercher ce qui est <b>public et professionnel</b> : le rôle, le périmètre, les prises de parole.</li><li><b>Dire à voix haute ce qu'on ne cherche pas, et pourquoi</b>, pendant la recherche : la vie privée, la famille, la santé, les opinions, les réseaux personnels, les photos.</li><li>Poser les trois règles concrètes : on ne collecte <b>jamais</b> de donnée sensible au sens du RGPD — santé, opinions politiques, religion, orientation, appartenance syndicale — <b>même publique</b> ; on <b>informe la personne</b> de ce qu'on a collecté sur elle au plus tard au premier contact, parce que la donnée n'a pas été recueillie auprès d'elle ; et on ne garde <b>pas indéfiniment</b> un dossier de prospection — l'usage admis est de <b>trois ans sans contact</b>.</li><li>Corriger explicitement la phrase que toute la cible a en tête : <b>« c'est public donc j'ai le droit » est faux</b>. Public veut dire accessible, pas réutilisable sans condition.</li><li><b>Lire la phrase d'information face caméra</b>, telle qu'on la dira en ouverture de rendez-vous.</li></ol>
+    <div class="cbx">
+  <div class="cbx-h"><span class="cbx-l">La recherche sur l&#x27;interlocuteur</span>
+    <button class="cbx-b" onclick="cp(this,'d80')">Copier</button></div>
+  <pre id="d80" class="cbx-p">Quel est le parcours professionnel public de [NOM], [FONCTION] chez [ENTREPRISE] ? Quelles prises de parole professionnelles a-t-il ou elle eues ?</pre>
+</div><div class="cbx">
+  <div class="cbx-h"><span class="cbx-l">La phrase d&#x27;information — à dire en OUVERTURE du rendez-vous</span>
+    <button class="cbx-b" onclick="cp(this,'d81')">Copier</button></div>
+  <pre id="d81" class="cbx-p">J&#x27;ai préparé notre rendez-vous, j&#x27;ai regardé ce que votre entreprise publie et votre parcours professionnel. Rien d&#x27;autre : ce qui est public et professionnel, c&#x27;est tout.</pre>
+</div><div class="tip warn"><span class="tip-i">💬</span><div class="tip-c"><strong>Cette phrase se dit au début, pas à la fin</strong>
+Elle désamorce la gêne de quelqu'un qui sent qu'on s'est renseigné sur lui. Gardée pour la fin, elle
+produit exactement l'effet inverse.</div></div>
+    <p class="hc2"><b>Hors champ :</b> Tout ce qui relève de la vie privée : famille, santé, opinions, réseaux personnels. Et on le dit à voix haute pendant la recherche.</p>
+  </div>
+</div>
+<div class="lec" id="L09">
+  <div class="lec-h"><span class="lec-n">09</span><span class="lec-t">Transformer en questions</span><span class="lec-d">8 min</span></div>
+  <div class="lec-b">
+    <div class="say"><div class="sl">La phrase d'ouverture</div><p>« La recherche ne sert à rien si elle ne devient pas une question à poser. »</p></div>
+    <dl class="ecr"><dt>À l'écran</dt><dd>Les résultats des leçons 5 à 8, rassemblés. <b>Aucune nouvelle recherche.</b></dd><dt>Budget</dt><dd>Zéro. On travaille sur ce qui a été collecté.</dd><dt>Ce qu'on démontre</dt><dd>C'est <b>l'étape que tout le monde saute</b> : on collecte, on ne transforme pas, et on arrive en rendez-vous avec des faits au lieu de questions.</dd></dl>
+    <h4>Les gestes, dans l'ordre</h4>
+    <ol class="clics"><li>Construire les cinq questions <b>à l'écran</b>, en montrant d'où vient chacune.</li><li>Une par source : le <b>secteur</b> (leçon 5, une contrainte réglementaire), l'<b>actualité de l'entreprise</b> (leçon 6, un communiqué récent), les <b>offres d'emploi</b> (leçon 7, ce qu'ils cherchent à recruter), la <b>page tarifaire</b> (leçon 7, leur positionnement), le <b>parcours de l'interlocuteur</b> (leçon 8, ce qui le concerne lui).</li><li>Montrer la règle de formulation de la cinquième : on ne dit pas « j'ai vu que vous avez fait X », on demande <b>« comment ça se passe chez vous sur Y »</b>. Faire la démonstration des deux formulations, l'une après l'autre.</li><li>Vérifier que les cinq sont des <b>questions ouvertes</b> : aucune ne doit pouvoir se répondre par oui ou non.</li></ol>
+    
+    <p class="hc2"><b>Hors champ :</b> De nouvelles recherches. On travaille sur ce qui a été collecté aux leçons 5 à 8, rien d'autre.</p>
+  </div>
+</div>
+<div class="lec" id="L10">
+  <div class="lec-h"><span class="lec-n">10</span><span class="lec-t">Le brief d'une page</span><span class="lec-d">7 min</span></div>
+  <div class="lec-b">
+    <div class="say"><div class="sl">La phrase d'ouverture</div><p>« Une page, imprimable, lisible dans l'ascenseur. »</p></div>
+    <dl class="ecr"><dt>À l'écran</dt><dd>Le brief en cours de rédaction, puis l'<b>espace Notion</b> du chapitre précédent.</dd><dt>Données</dt><dd>Le <b>modèle de brief</b>, téléchargeable plus haut, et les résultats des leçons 5 à 9.</dd><dt>Ce qu'on démontre</dt><dd>La <b>chaîne entre les outils</b> : ce qui sort de Perplexity va se ranger dans la fiche client Notion. Le dire à l'écran.</dd></dl>
+    <h4>Les gestes, dans l'ordre</h4>
+    <ol class="clics"><li>Ouvrir le modèle de brief et le remplir section par section, à partir de ce qui a été collecté.</li><li>Garder <b>les sources</b> dans les sections secteur et entreprise. Un brief sans sources ne se défend pas devant un client.</li><li>Remplir la section <b>« Ce que je ne sais pas »</b> — les trous. Dire que c'est la section la plus utile du brief, et celle qu'on supprime quand on est pressé.</li><li>Vérifier la règle : <b>une page</b>. Si ça déborde, c'est qu'on a recopié de la recherche au lieu de trier.</li><li><b>Coller le brief dans la fiche client Notion</b> du chapitre précédent, et montrer qu'il est désormais rangé au bon endroit.</li></ol>
+    
+    <p class="hc2"><b>Hors champ :</b> La mise en forme avancée du document. Une page lisible, rangée dans la fiche client, et c'est fini.</p>
+  </div>
+</div>
+<h3>Partie 3 — Fiabiliser et livrer</h3>
+
+<div class="lec" id="L11">
+  <div class="lec-h"><span class="lec-n">11</span><span class="lec-t">Limites et checklist</span><span class="lec-d">8 min</span></div>
+  <div class="lec-b">
+    <div class="say"><div class="sl">La phrase d'ouverture</div><p>« Une source citée n'est pas une source vérifiée. Et par défaut, tes recherches servent à entraîner le modèle. »</p></div>
+    <dl class="ecr"><dt>À l'écran</dt><dd>La <b>capture de l'écart résumé/source</b>, puis les <b>paramètres du compte</b>.</dd><dt>Données</dt><dd>La capture prise pendant la préparation, avec sa date. <b>Elle ne se trouve pas en direct.</b></dd><dt>Les deux temps</dt><dd>D'abord l'écart entre ce que le résumé affirme et ce que la source dit. Ensuite le réglage de conservation des données, <b>activé par défaut</b>.</dd></dl>
+    <h4>Les gestes, dans l'ordre</h4>
+    <ol class="clics"><li>Montrer la capture : le <b>résumé à gauche</b>, le <b>passage de la source à droite</b>, surligné. Dire la date de la capture — « voilà un cas que j'ai rencontré en préparant, le [date] ».</li><li>Nommer la forme que prend l'écart : un chiffre arrondi, une date glissée, un conditionnel perdu, une attribution déplacée, ou une source qui ne dit tout simplement rien.</li><li>Poser la règle : <b>tout chiffre qui entrera dans une proposition commerciale est ouvert et vérifié à la source</b>. Sans exception.</li><li>Ouvrir les <b>paramètres du compte</b> et montrer le réglage de <b>conservation des données à des fins d'amélioration des modèles</b> — activé par défaut.</li><li><b>Le désactiver à l'écran</b>, en entier, sans accélérer. Dix secondes que personne ne fait parce que personne ne sait que ça existe.</li><li>Dire pourquoi c'est décisif pour un consultant : il tape le <b>nom de ses prospects</b> et le contenu de ses dossiers dans cette barre de recherche.</li><li>Rappeler en une phrase les trois règles de la leçon 8 sur les personnes, et refermer.</li></ol>
+    <div class="tip err"><span class="tip-i">📸</span><div class="tip-c"><strong>La capture se prend pendant la préparation, pas le jour du tournage</strong>
+La réponse peut changer entre deux recherches. En ouvrant systématiquement les sources citées pendant
+la préparation des leçons 5 à 8, l'écart finit par apparaître — on le capture, on note la date, et on
+peut tourner même si on ne le retrouve pas le jour J.</div></div>
+    <p class="hc2"><b>Hors champ :</b> Les techniques de vérification journalistique. On ouvre une source, on montre l'écart, on désactive la conservation des données.</p>
+  </div>
+</div></div>
+</div>
+<div class="footer">
+  <p><strong>🔎 Livret de tournage — Perplexity + Comet</strong></p>
+  <p>Studeria · parcours Focus outils · octobre 2026</p>
+</div>
+</div></div>
+
+<script>
+const links=document.querySelectorAll('.sidebar a');
+const chapters=document.querySelectorAll('.ch');
+function updateActive(){
+  let current='';
+  chapters.forEach(ch=>{if(ch.getBoundingClientRect().top<=150)current=ch.id;});
+  links.forEach(l=>{l.classList.toggle('active',l.getAttribute('href')==='#'+current);});
+}
+window.addEventListener('scroll',updateActive);updateActive();
+links.forEach(l=>l.addEventListener('click',()=>{
+  if(window.innerWidth<=800)document.querySelector('.sidebar').classList.remove('open');
+}));
+let DL=null;
+(async()=>{
+  try{DL=await window.claude.use("downloads");}catch(e){DL=null;}
+  if(!DL)document.querySelectorAll(".dlb").forEach(b=>{
+    b.disabled=true;
+    const s=b.querySelector(".dlb-t span");
+    if(s)s.textContent="T\u00e9l\u00e9chargement indisponible dans cette vue \u2014 demander le fichier \u00e0 Massylia";
+  });
+})();
+async function tele(btn){
+  if(!DL)return;
+  const b64=btn.querySelector("script").textContent.trim();
+  const bin=atob(b64);const u=new Uint8Array(bin.length);
+  for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);
+  const lbl=btn.querySelector(".dlb-t b");const o=lbl.textContent;
+  try{
+    await DL.save({filename:btn.dataset.nom,data:new Blob([u])});
+    lbl.textContent="Enregistr\u00e9 \u2713";
+  }catch(e){
+    lbl.textContent=(e&&e.code==="declined")?o:"Non enregistr\u00e9";
+  }
+  setTimeout(()=>{lbl.textContent=o;},2200);
+}
+function cp(btn,id){
+  const t=document.getElementById(id).textContent;
+  const done=()=>{const o=btn.textContent;btn.textContent='Copie\u0301 \u2713';btn.classList.add('done');
+    setTimeout(()=>{btn.textContent=o;btn.classList.remove('done');},1600);};
+  if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(t).then(done).catch(()=>fb());}
+  else fb();
+  function fb(){const a=document.createElement('textarea');a.value=t;a.style.position='fixed';
+    a.style.opacity='0';document.body.appendChild(a);a.select();
+    try{document.execCommand('copy');done();}catch(e){}document.body.removeChild(a);}
+}
+</script>
+
+</body></html>
